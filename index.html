@@ -54,7 +54,7 @@
     .pill.active{border-color:transparent; color:var(--text); box-shadow:0 0 0 2px rgba(106,169,255,.9) inset}
     
     /* Layout */
-    .grid{display:grid; gap:14px; grid-template-columns: repeat(12, minmax(0, 1fr)); margin-top:12px;}
+    .grid{display:grid; gap:14px; grid-template-columns: repeat(12, 1fr); margin-top:12px;}
     .card{
       grid-column: span 12;
       background:linear-gradient(180deg, rgba(18,21,27,.95), rgba(15,18,23,.95));
@@ -79,10 +79,13 @@
       word-break:break-word;
     }
 
-    .two{display:grid; gap:14px; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items:start;}
+    .two{display:grid; gap:14px; grid-template-columns: repeat(12, 1fr); align-items:start;}
     .col7{grid-column: span 12}
     .col5{grid-column: span 12}
-    @media (min-width: 900px){ .col7{grid-column: span 7} .col5{grid-column: span 5} }
+    @media (min-width: 900px){
+      .col7{grid-column: span 7; min-width:0}
+      .col5{grid-column: span 5; min-width:0}
+    }
 
     .linkbox{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
     .btn{
@@ -115,10 +118,7 @@
       width:100%;
       height:auto;
       display:block;
-    }
-    /* On desktop: enforce min-width so labels stay readable; diagram scrolls if needed */
-    @media (min-width: 900px){
-      .diagram svg{ min-width:780px; }
+      min-width:780px;
     }
     .svg{width:100%; height:auto; display:block;}
     .legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; color:var(--muted); font-size:13px;}
