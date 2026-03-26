@@ -114,23 +114,17 @@
     .diagram::-webkit-scrollbar{height:6px; width:6px}
     .diagram::-webkit-scrollbar-thumb{background:rgba(106,169,255,.35); border-radius:3px}
     .diagram::-webkit-scrollbar-track{background:transparent}
-    .diagram-wrap{position:relative; display:block;}
-    .diagram-wrap::after{
-      content:'scroll \203A';
-      position:absolute;
-      top:50%; right:0;
-      transform:translateY(-50%);
-      padding:5px 10px 5px 24px;
-      background:linear-gradient(to right, transparent, rgba(11,13,16,.92) 40%);
-      color:rgba(106,169,255,.75);
-      font-size:12px;
+    .diagram::after{
+      content:'scroll \2192';
+      display:block;
+      text-align:right;
+      color:rgba(106,169,255,.65);
+      font-size:11px;
       letter-spacing:.04em;
+      padding:5px 2px 0;
       pointer-events:none;
-      border-radius:0 14px 14px 0;
-      opacity:0;
-      transition:opacity .25s;
     }
-    .diagram-wrap.can-scroll::after{ opacity:1; }
+    @media(max-width:640px){ .diagram::after{ display:none; } }
     .desk-svg{
       width:100%;
       height:auto;
@@ -1027,9 +1021,6 @@
       requestAnimationFrame(function(){
         requestAnimationFrame(function(){
           if(window.__applyDiagramLayout) window.__applyDiagramLayout();
-          document.querySelectorAll('.diagram').forEach(function(d){
-            d.dispatchEvent(new Event('scroll'));
-          });
         });
       });
     }
@@ -1074,30 +1065,6 @@
     })();
   </script>
 
-  <script>
-    (function(){
-      function update(el){
-        var wrap = el.parentNode;
-        if(!wrap || !wrap.classList.contains('diagram-wrap')) return;
-        var scrollable = el.scrollWidth > el.clientWidth + 2;
-        var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
-        wrap.classList.toggle('can-scroll', scrollable && !atEnd);
-      }
-      document.addEventListener('DOMContentLoaded', function(){
-        document.querySelectorAll('.diagram').forEach(function(el){
-          var wrap = document.createElement('div');
-          wrap.className = 'diagram-wrap';
-          el.parentNode.insertBefore(wrap, el);
-          wrap.appendChild(el);
-          el.addEventListener('scroll', function(){ update(el); }, {passive:true});
-          update(el);
-        });
-        window.addEventListener('resize', function(){
-          document.querySelectorAll('.diagram').forEach(update);
-        }, {passive:true});
-      });
-    })();
-  </script>
 
   <script>
     /* Enforce mobile/desktop SVG swap; compute explicit mob-svg heights for Safari */
