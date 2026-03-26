@@ -139,7 +139,7 @@
       display:block;
       min-width:780px;
     }
-    .mob-svg{display:none; width:100%; height:auto;}
+    .mob-svg{display:none; width:100% !important; height:auto !important;}
     .svg{width:100%; height:auto; display:block;}
     .legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; color:var(--muted); font-size:13px;}
     .chip{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(42,50,64,.75); background:rgba(18,21,27,.55)}
@@ -455,7 +455,7 @@
                 <text class="small" x="170" y="472">variable impairment; reversible collapse under triggers</text>
               </svg>
               <!-- Mobile: single-column layout -->
-              <svg class="mob-svg" viewBox="0 0 500 830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baseline pathway diagram" preserveAspectRatio="xMidYMid meet">
+              <svg class="mob-svg" viewBox="0 0 500 830" width="500" height="830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baseline pathway diagram" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="mg1" x1="0" x2="1">
                     <stop offset="0" stop-color="#6aa9ff" stop-opacity="0.18"/>
@@ -612,7 +612,7 @@
                 <text class=”small” x=”90” y=”575”>Goal: fewer collapses, faster recovery, wider usable window</text>
               </svg>
               <!-- Mobile: single-column layout -->
-              <svg class=”mob-svg” viewBox=”0 0 500 1065” xmlns=”http://www.w3.org/2000/svg” role=”img” aria-label=”Intervention overlay diagram” preserveAspectRatio=”xMidYMid meet”>
+              <svg class=”mob-svg” viewBox=”0 0 500 1065” width=”500” height=”1065” xmlns=”http://www.w3.org/2000/svg” role=”img” aria-label=”Intervention overlay diagram” preserveAspectRatio=”xMidYMid meet”>
                 <defs>
                   <linearGradient id=”mg2” x1=”0” x2=”1”>
                     <stop offset=”0” stop-color=”#6aa9ff” stop-opacity=”0.20”/>
@@ -756,7 +756,7 @@
                 <line class=”line” x1=”820” y1=”220” x2=”820” y2=”260”/>
               </svg>
               <!-- Mobile: single-column layout -->
-              <svg class=”mob-svg” viewBox=”0 0 500 730” xmlns=”http://www.w3.org/2000/svg” role=”img” aria-label=”Nervonic acid role diagram” preserveAspectRatio=”xMidYMid meet”>
+              <svg class=”mob-svg” viewBox=”0 0 500 730” width=”500” height=”730” xmlns=”http://www.w3.org/2000/svg” role=”img” aria-label=”Nervonic acid role diagram” preserveAspectRatio=”xMidYMid meet”>
                 <defs>
                   <linearGradient id=”mg3” x1=”0” x2=”1”>
                     <stop offset=”0” stop-color=”#6aa9ff” stop-opacity=”0.20”/>
@@ -880,7 +880,7 @@
                 <line class="line" x1="840" y1="280" x2="840" y2="320"/>
               </svg>
               <!-- Mobile: single-column layout -->
-              <svg class="mob-svg" viewBox="0 0 500 740" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phenotype modifiers diagram" preserveAspectRatio="xMidYMid meet">
+              <svg class="mob-svg" viewBox="0 0 500 740" width="500" height="740" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phenotype modifiers diagram" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="mg4" x1="0" x2="1">
                     <stop offset="0" stop-color="#c77dff" stop-opacity="0.18"/>
@@ -1100,6 +1100,7 @@
         });
         document.querySelectorAll('.mob-svg').forEach(function(el){
           el.style.display = mobile ? 'block' : 'none';
+          if(mobile){ el.style.width='100%'; el.style.height='auto'; }
         });
       }
       applyDiagramLayout();
