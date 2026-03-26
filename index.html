@@ -178,8 +178,8 @@
       .sub{font-size:13px}
       .pill{flex:0 0 auto}
       .diagram{padding:10px}
-      .desk-svg{display:none}
-      .mob-svg{display:block}
+      .desk-svg{display:none !important}
+      .mob-svg{display:block !important}
     }
   
     /* Splash overlay */
@@ -1087,6 +1087,23 @@
           document.querySelectorAll('.diagram').forEach(update);
         }, {passive:true});
       });
+    })();
+  </script>
+
+  <script>
+    /* JS fallback: enforce mobile/desktop SVG swap regardless of CSS cache */
+    (function(){
+      function applyDiagramLayout(){
+        var mobile = window.innerWidth <= 640;
+        document.querySelectorAll('.desk-svg').forEach(function(el){
+          el.style.display = mobile ? 'none' : 'block';
+        });
+        document.querySelectorAll('.mob-svg').forEach(function(el){
+          el.style.display = mobile ? 'block' : 'none';
+        });
+      }
+      applyDiagramLayout();
+      window.addEventListener('resize', applyDiagramLayout, {passive:true});
     })();
   </script>
 </body>
