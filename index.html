@@ -1021,13 +1021,17 @@
       history.replaceState(null, '', '#' + viewId);
       window.scrollTo({top:0, behavior:'smooth'});
 
-      /* After section is visible, recompute mob-svg heights and scroll hints */
-      setTimeout(function(){
-        if(window.__applyDiagramLayout) window.__applyDiagramLayout();
-        document.querySelectorAll('.diagram').forEach(function(d){
-          d.dispatchEvent(new Event('scroll'));
+      /* After section is visible, recompute mob-svg heights and scroll hints.
+         Use double-rAF so iOS Safari has finished its layout pass before we
+         measure clientWidth; a fixed 50 ms timeout is not reliable on iOS. */
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          if(window.__applyDiagramLayout) window.__applyDiagramLayout();
+          document.querySelectorAll('.diagram').forEach(function(d){
+            d.dispatchEvent(new Event('scroll'));
+          });
         });
-      }, 50);
+      });
     }
 
     pills.forEach(p => p.addEventListener('click', (e)=>{
