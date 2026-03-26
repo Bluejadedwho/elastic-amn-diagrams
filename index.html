@@ -1118,6 +1118,10 @@
             var vbW = parseFloat(parts[2]);
             var vbH = parseFloat(parts[3]);
             var w = el.parentElement ? el.parentElement.clientWidth : 0;
+            /* iOS Safari can return 0 for clientWidth inside overflow:auto containers
+               even after the section becomes visible. Fall back to window width minus
+               known insets: wrap(12*2) + card-bd(16*2) + diagram(10*2) + borders(2) = 76px */
+            if(w === 0) w = Math.max(0, window.innerWidth - 76);
             el.style.height = (w > 0 && vbW) ? Math.round(w * vbH / vbW) + 'px' : 'auto';
           } else {
             el.style.height = 'auto';
