@@ -178,6 +178,7 @@
       .diagram{padding:10px}
       .desk-svg{display:none !important}
       .mob-svg{display:block !important}
+      .diagram-wrap::after{opacity:1}
     }
   
     /* Splash overlay */
@@ -1021,6 +1022,12 @@
       history.replaceState(null, '', '#' + viewId);
       window.scrollTo({top:0, behavior:'smooth'});
 
+      /* Re-evaluate scroll indicators now that the section is visible */
+      setTimeout(function(){
+        document.querySelectorAll('.diagram').forEach(function(d){
+          d.dispatchEvent(new Event('scroll'));
+        });
+      }, 50);
     }
 
     pills.forEach(p => p.addEventListener('click', (e)=>{
