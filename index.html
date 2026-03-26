@@ -178,7 +178,6 @@
       .diagram{padding:10px}
       .desk-svg{display:none !important}
       .mob-svg{display:block !important}
-      .diagram-wrap::after{opacity:1}
     }
   
     /* Splash overlay */
@@ -1022,8 +1021,9 @@
       history.replaceState(null, '', '#' + viewId);
       window.scrollTo({top:0, behavior:'smooth'});
 
-      /* Re-evaluate scroll indicators now that the section is visible */
+      /* After section is visible, recompute mob-svg heights and scroll hints */
       setTimeout(function(){
+        if(window.__applyDiagramLayout) window.__applyDiagramLayout();
         document.querySelectorAll('.diagram').forEach(function(d){
           d.dispatchEvent(new Event('scroll'));
         });
@@ -1096,7 +1096,7 @@
   </script>
 
   <script>
-    /* JS fallback: enforce mobile/desktop SVG swap regardless of CSS cache */
+    /* Enforce mobile/desktop SVG swap; compute explicit mob-svg heights for Safari */
     (function(){
       function applyDiagramLayout(){
         var mobile = window.innerWidth <= 640;
@@ -1105,9 +1105,22 @@
         });
         document.querySelectorAll('.mob-svg').forEach(function(el){
           el.style.display = mobile ? 'block' : 'none';
-          if(mobile){ el.style.width='100%'; el.style.height='auto'; }
+          if(!mobile) return;
+          el.style.width = '100%';
+          /* Compute explicit pixel height from viewBox so Safari doesn't collapse it */
+          var vb = el.getAttribute('viewBox');
+          if(vb){
+            var parts = vb.trim().split(/[\s,]+/);
+            var vbW = parseFloat(parts[2]);
+            var vbH = parseFloat(parts[3]);
+            var w = el.parentElement ? el.parentElement.clientWidth : 0;
+            el.style.height = (w > 0 && vbW) ? Math.round(w * vbH / vbW) + 'px' : 'auto';
+          } else {
+            el.style.height = 'auto';
+          }
         });
       }
+      window.__applyDiagramLayout = applyDiagramLayout;
       applyDiagramLayout();
       window.addEventListener('resize', applyDiagramLayout, {passive:true});
     })();
