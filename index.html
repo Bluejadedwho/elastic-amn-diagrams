@@ -106,7 +106,9 @@
       background:rgba(11,13,16,.55);
       border:1px solid rgba(42,50,64,.7);
       padding:12px;
-      overflow:auto;
+      overflow-x:auto;
+      overflow-y:hidden;
+      touch-action:pan-x;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
       scrollbar-color:rgba(106,169,255,.35) transparent;
@@ -115,24 +117,31 @@
     .diagram::-webkit-scrollbar-thumb{background:rgba(106,169,255,.35); border-radius:3px}
     .diagram::-webkit-scrollbar-track{background:transparent}
     .diagram-wrap{position:relative; display:block;}
+    
     .diagram-wrap::after{
-      content:'scroll \203A';
+      content:'↔ Scroll for more';
       position:absolute;
-      top:50%; right:0;
-      transform:translateY(-50%);
-      padding:5px 10px 5px 24px;
-      background:linear-gradient(to right, transparent, rgba(11,13,16,.92) 40%);
-      color:rgba(106,169,255,.75);
+      top:12px; right:12px;
+      padding:6px 12px;
+      background:rgba(106,169,255,.15);
+      border:1px solid rgba(106,169,255,.4);
+      color:#6aa9ff;
       font-size:12px;
-      letter-spacing:.04em;
+      font-weight:600;
+      letter-spacing:.02em;
+      border-radius:8px;
       pointer-events:none;
-      border-radius:0 14px 14px 0;
       opacity:0;
-      transition:opacity .25s;
+      transition:opacity .3s ease;
+      z-index:10;
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    @media (hover: hover) and (pointer: fine){
-      .diagram-wrap.can-scroll::after{ opacity:1; }
+    .diagram-wrap.can-scroll::after{ 
+      opacity:1; 
     }
+    
     .diagram svg{
       width:100%;
       height:auto;
@@ -162,7 +171,6 @@
     .resTeal{border-color: rgba(90,200,220,.55); background: rgba(90,200,220,.08);}
     .resGreen{border-color: rgba(126,231,135,.55); background: rgba(126,231,135,.08);}
     .resNeutral{border-color: rgba(233,237,243,.22); background: rgba(255,255,255,.03);}
-
 
     /* Mobile: keep tabs visible; allow horizontal scroll */
     .nav{
@@ -255,7 +263,6 @@
       line-height:1.35;
     }
 
-  
     /* Resilience view styles */
     .grid3{display:grid; grid-template-columns: 1fr; gap:14px; margin-top:14px;}
     @media (min-width: 860px){ .grid3{grid-template-columns: 1fr 1fr 1fr;} }
@@ -301,7 +308,6 @@
       line-height:1.4;
     }
 
-  
     .nieveCallout{
       margin-top:12px;
       padding:12px 12px;
@@ -369,16 +375,12 @@
             Each diagram focuses on one narrow question. Boxes and callouts describe logic and constraints, not guaranteed outcomes.
           </p>
 
-          
-
-
           <p class="note muted" style="margin-top:12px">
             Note: These diagrams are for explanation and tracking. They are not medical advice.
           </p>
         </div>
       </div>
     </section>
-
 
     <section id="baseline" class="grid view hide">
       <div class="card">
@@ -647,10 +649,6 @@
             <h2>Phenotype modifiers</h2>
             <div class="meta">Why your profile may have higher-than-average upside for margin-based gains.</div>
           </div>
-          
-            
-
-
           <div class="meta">Concept map</div>
         </div>
         <div class="bd">
@@ -712,6 +710,7 @@
         </div>
       </div>
     </section>
+
     <section id="resilience" class="grid view hide">
       <div class="card">
         <div class="hd">
@@ -726,7 +725,7 @@
           <div class="note" style="border-color: rgba(126,231,135,.25); background: rgba(126,231,135,.06); margin-bottom:12px">
             This section is written for someone who is currently well. It is not a forecast and does not imply future symptoms.
           </div>
-<p class="note">
+          <p class="note">
             <strong>Question this diagram addresses:</strong>
             If neural structure is intact, what supports long-term resilience and stability?
           </p>
@@ -779,11 +778,9 @@
           <div class="legend" style="margin-top:12px">
             <span class="chip"><span class="dot b"></span> Supports / resilience factors</span>
           </div>
-
-</div>
+        </div>
       </div>
     </section>
-
 
     <footer>Note: These diagrams are for explanation and tracking. They are not medical advice.</footer>
   </div>
@@ -815,60 +812,9 @@
       show(a.dataset.jump);
     }));
 
-        const initial = 'home';
+    const initial = 'home';
     show(initial);
-</script>
-
-    <script>
-    // Splash: require user action (Enter) so it doesn't vanish instantly on fast loads.
-    (function(){
-      function hideSplash(){
-        var s = document.getElementById('splash');
-        if(!s) return;
-        s.classList.add('hidden');
-        setTimeout(function(){ if(s && s.parentNode){ s.parentNode.removeChild(s);} }, 450);
-      }
-      window.__hideSplash = hideSplash;
-      // Optional safety: auto-dismiss after 8 seconds
-      setTimeout(hideSplash, 8000);
-    })();
-  </script>
-
-
-  <script>
-    (function(){
-      var s = document.getElementById('splash');
-      function hide(){ if(window.__hideSplash) window.__hideSplash(); }
-      if(s){ s.addEventListener('click', function(e){ hide(); }); }
-      var btn = document.getElementById('enterBtn');
-      if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hide(); }); }
-    })();
   </script>
 
   <script>
     (function(){
-      function update(el){
-        var wrap = el.parentNode;
-        if(!wrap || !wrap.classList.contains('diagram-wrap')) return;
-        var scrollable = el.scrollWidth > el.clientWidth + 2;
-        var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
-        wrap.classList.toggle('can-scroll', scrollable && !atEnd);
-      }
-      document.addEventListener('DOMContentLoaded', function(){
-        document.querySelectorAll('.diagram').forEach(function(el){
-          var wrap = document.createElement('div');
-          wrap.className = 'diagram-wrap';
-          el.parentNode.insertBefore(wrap, el);
-          wrap.appendChild(el);
-          el.addEventListener('scroll', function(){ update(el); }, {passive:true});
-          update(el);
-        });
-        window.addEventListener('resize', function(){
-          document.querySelectorAll('.diagram').forEach(update);
-        }, {passive:true});
-      });
-    })();
-  </script>
-</body>
-
-</html>
