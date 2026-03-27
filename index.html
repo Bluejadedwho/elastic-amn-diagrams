@@ -1095,7 +1095,23 @@
         });
       }
       window.__applyDiagramLayout = applyDiagramLayout;
-      applyDiagramLayout();
+      /* iOS WebKit fix: SVG elements inside display:none parents are never
+         initialised, so they stay blank even after being shown. Briefly force
+         every section visible for one frame (covered by the splash screen)
+         so WebKit fully registers each SVG's layout, gradients, and markers.
+         applyDiagramLayout() runs while everything is visible so clientWidth
+         measurements are accurate for explicit pixel-height computation. */
+      (function(){
+        var allViews = document.querySelectorAll('.view');
+        var allMob   = document.querySelectorAll('.mob-svg');
+        allViews.forEach(function(v){ v.style.display='block'; });
+        allMob.forEach(function(el){ el.style.display='block'; });
+        applyDiagramLayout();
+        requestAnimationFrame(function(){
+          allViews.forEach(function(v){ v.style.display=''; });
+          applyDiagramLayout();
+        });
+      })();
       window.addEventListener('resize', applyDiagramLayout, {passive:true});
     })();
   </script>
