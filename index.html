@@ -106,7 +106,8 @@
       background:rgba(11,13,16,.55);
       border:1px solid rgba(42,50,64,.7);
       padding:12px;
-      overflow:auto;
+      overflow-x:auto;
+      overflow-y:hidden;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
       scrollbar-color:rgba(106,169,255,.35) transparent;
@@ -130,9 +131,9 @@
       opacity:0;
       transition:opacity .25s;
     }
-    @media (hover: hover) and (pointer: fine){
-      .diagram-wrap.can-scroll::after{ opacity:1; }
-    }
+    /* Removed the hover restriction so the arrow shows on touch devices */
+    .diagram-wrap.can-scroll::after{ opacity:1; }
+    
     .diagram svg{
       width:100%;
       height:auto;
@@ -762,99 +763,4 @@
             <strong>Note:</strong> This diagram focuses on maintaining neurological resilience in a healthy individual. It does not represent a disease pathway and does not describe progression or risk.
           </div>
 
-          <div class="note" style="margin-top:10px; border-color: rgba(126,231,135,.25); background: rgba(126,231,135,.06)">
-            <strong>For Nieve:</strong> A calm, maintenance-focused way to think about long-term resilience.
-          </div>
-
-          <div class="legend" style="margin-top:12px">
-            <span class="chip"><span class="dot b"></span> Supports / resilience factors</span>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <footer>Note: These diagrams are for explanation and tracking. They are not medical advice.</footer>
-  </div>
-
-  <script>
-    const pills = Array.from(document.querySelectorAll('.pill'));
-    const views = Array.from(document.querySelectorAll('.view'));
-    const jumpers = Array.from(document.querySelectorAll('[data-jump]'));
-    const nav = document.getElementById('nav');
-    
-    function show(viewId){
-      views.forEach(v => v.classList.add('hide'));
-      const el = document.getElementById(viewId);
-      if(el) el.classList.remove('hide');
-
-      pills.forEach(p => p.classList.toggle('active', p.dataset.view === viewId));
-      history.replaceState(null, '', '#' + viewId);
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
-
-    pills.forEach(p => p.addEventListener('click', (e)=>{
-      e.preventDefault();
-      show(p.dataset.view);
-    }));
-
-    jumpers.forEach(a => a.addEventListener('click', (e)=>{
-      e.preventDefault();
-      show(a.dataset.jump);
-    }));
-
-    const initial = 'home';
-    show(initial);
-  </script>
-
-  <script>
-    // Splash: require user action (Enter) so it doesn't vanish instantly on fast loads.
-    (function(){
-      function hideSplash(){
-        var s = document.getElementById('splash');
-        if(!s) return;
-        s.classList.add('hidden');
-        setTimeout(function(){ if(s && s.parentNode){ s.parentNode.removeChild(s);} }, 450);
-      }
-      window.__hideSplash = hideSplash;
-      // Optional safety: auto-dismiss after 8 seconds
-      setTimeout(hideSplash, 8000);
-    })();
-  </script>
-
-  <script>
-    (function(){
-      var s = document.getElementById('splash');
-      function hide(){ if(window.__hideSplash) window.__hideSplash(); }
-      if(s){ s.addEventListener('click', function(e){ hide(); }); }
-      var btn = document.getElementById('enterBtn');
-      if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hide(); }); }
-    })();
-  </script>
-
-  <script>
-    (function(){
-      function update(el){
-        var wrap = el.parentNode;
-        if(!wrap || !wrap.classList.contains('diagram-wrap')) return;
-        var scrollable = el.scrollWidth > el.clientWidth + 2;
-        var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
-        wrap.classList.toggle('can-scroll', scrollable && !atEnd);
-      }
-      document.addEventListener('DOMContentLoaded', function(){
-        document.querySelectorAll('.diagram').forEach(function(el){
-          var wrap = document.createElement('div');
-          wrap.className = 'diagram-wrap';
-          el.parentNode.insertBefore(wrap, el);
-          wrap.appendChild(el);
-          el.addEventListener('scroll', function(){ update(el); }, {passive:true});
-          update(el);
-        });
-        window.addEventListener('resize', function(){
-          document.querySelectorAll('.diagram').forEach(update);
-        }, {passive:true});
-      });
-    })();
-  </script>
-</body>
-</html>
+          <div class="note"
