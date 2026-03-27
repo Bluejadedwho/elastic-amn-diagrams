@@ -1083,17 +1083,11 @@
             var vbW = parseFloat(parts[2]);
             var vbH = parseFloat(parts[3]);
             if(vbW && vbH){
-              /* Primary: aspect-ratio lets the browser compute height from width
-                 without needing to measure clientWidth (avoids iOS rAF timing issues) */
-              el.style.aspectRatio = vbW + ' / ' + vbH;
-              el.style.height = 'auto';
-              /* Fallback for older iOS that doesn't support aspect-ratio:
-                 compute pixel height from window width minus known layout insets */
-              if(!el.style.aspectRatio){
-                var w = el.parentElement ? el.parentElement.clientWidth : 0;
-                if(w === 0) w = Math.max(0, window.innerWidth - 76);
-                el.style.height = w > 0 ? Math.round(w * vbH / vbW) + 'px' : 'auto';
-              }
+              /* Always set explicit pixel height — iOS collapses SVG height to 0
+                 when coming out of display:none even with aspect-ratio set */
+              var w = el.parentElement ? el.parentElement.clientWidth : 0;
+              if(w === 0) w = Math.max(0, window.innerWidth - 76);
+              el.style.height = w > 0 ? Math.round(w * vbH / vbW) + 'px' : 'auto';
             }
           } else {
             el.style.height = 'auto';
