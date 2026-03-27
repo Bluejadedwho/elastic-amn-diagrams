@@ -106,8 +106,7 @@
       background:rgba(11,13,16,.55);
       border:1px solid rgba(42,50,64,.7);
       padding:12px;
-      overflow-x:auto;
-      overflow-y:hidden;
+      overflow:auto;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
       scrollbar-color:rgba(106,169,255,.35) transparent;
@@ -131,9 +130,9 @@
       opacity:0;
       transition:opacity .25s;
     }
-    /* Removed the hover restriction so the arrow shows on touch devices */
-    .diagram-wrap.can-scroll::after{ opacity:1; }
-    
+    @media (hover: hover) and (pointer: fine){
+      .diagram-wrap.can-scroll::after{ opacity:1; }
+    }
     .diagram svg{
       width:100%;
       height:auto;
@@ -177,82 +176,6 @@
       .sub{font-size:13px}
       .pill{flex:0 0 auto}
       .diagram{padding:10px}
-    }
-  
-    /* Splash overlay */
-    #splash{
-      position:fixed;
-      inset:0;
-      z-index:9999;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(106,169,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 110% 10%, rgba(199,125,255,.14), transparent 55%),
-        #0b0f14;
-    }
-    #splash.hidden{opacity:0; visibility:hidden; pointer-events:none;}
-    .splashCard{
-      width:min(520px,92vw);
-      border-radius:22px;
-      border:1px solid rgba(42,50,64,.9);
-      background:linear-gradient(180deg, rgba(18,21,27,.92), rgba(15,18,23,.92));
-      box-shadow:0 10px 30px rgba(0,0,0,.35);
-      padding:28px 22px 22px;
-      text-align:center;
-      overflow:hidden;
-      transition:opacity .35s ease, transform .35s ease;
-    }
-    .floaty{
-      animation: floatUpDown 2.6s ease-in-out infinite;
-      display:inline-flex;
-      flex-direction:column;
-      align-items:center;
-      gap:14px;
-    }
-    @keyframes floatUpDown{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-10px)}
-    }
-    .logoWrap{
-      width:104px;height:104px;
-      border-radius:999px;
-      border:1px solid rgba(42,50,64,.9);
-      background:rgba(11,13,16,.45);
-      display:grid;place-items:center;
-      position:relative;overflow:hidden;
-      box-shadow:
-        0 0 24px rgba(96,165,250,.25),
-        0 0 46px rgba(167,139,250,.18);
-    }
-    .logoWrap::after{
-      content:"";
-      position:absolute;
-      top:-40%;left:-60%;
-      width:60%;height:180%;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-      transform:rotate(18deg);
-      animation: shimmer 1.8s linear infinite;
-      pointer-events:none;
-    }
-    @keyframes shimmer{0%{left:-60%}100%{left:140%}}
-    .logo{
-      width:74px;height:74px;border-radius:999px;
-      object-fit:cover;
-      filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
-    }
-    .splashTitle{
-      margin:0;
-      font-size:22px;
-      letter-spacing:.2px;
-    }
-    .splashSub{
-      margin:10px 0 0 0;
-      color:rgba(233,237,243,.7);
-      font-size:13px;
-      line-height:1.35;
     }
 
     /* Resilience view styles */
@@ -320,19 +243,6 @@
 
 </head>
 <body>
-
-  <div id="splash" aria-label="App loading screen" style="cursor:pointer">
-    <div class="splashCard">
-      <div class="floaty">
-        <div class="logoWrap" aria-hidden="true">
-          <img class="logo" src="icon.png" alt="" />
-        </div>
-        <h2 class="splashTitle">AMN Protocol Diagrams</h2>
-      </div>
-      <p class="splashSub">Conceptual pathway maps</p>
-      <button id="enterBtn" type="button" style="margin-top:16px;padding:10px 18px;border-radius:18px;border:1px solid rgba(42,50,64,.9);background:rgba(255,255,255,.06);color:#e8edf3;font-weight:600;cursor:pointer">Enter</button>
-    </div>
-  </div>
 
   <div class="wrap">
     <header>
@@ -763,4 +673,74 @@
             <strong>Note:</strong> This diagram focuses on maintaining neurological resilience in a healthy individual. It does not represent a disease pathway and does not describe progression or risk.
           </div>
 
-          <div class="note"
+          <div class="note" style="margin-top:10px; border-color: rgba(126,231,135,.25); background: rgba(126,231,135,.06)">
+            <strong>For Nieve:</strong> A calm, maintenance-focused way to think about long-term resilience.
+          </div>
+
+          <div class="legend" style="margin-top:12px">
+            <span class="chip"><span class="dot b"></span> Supports / resilience factors</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <footer>Note: These diagrams are for explanation and tracking. They are not medical advice.</footer>
+  </div>
+
+  <script>
+    const pills = Array.from(document.querySelectorAll(`.pill`));
+    const views = Array.from(document.querySelectorAll(`.view`));
+    const jumpers = Array.from(document.querySelectorAll(`[data-jump]`));
+    const nav = document.getElementById(`nav`);
+    
+    function show(viewId){
+      views.forEach(v => v.classList.add(`hide`));
+      const el = document.getElementById(viewId);
+      if(el) el.classList.remove(`hide`);
+
+      pills.forEach(p => p.classList.toggle(`active`, p.dataset.view === viewId));
+      history.replaceState(null, ``, `#` + viewId);
+      window.scrollTo({top:0, behavior:`smooth`});
+    }
+
+    pills.forEach(p => p.addEventListener(`click`, (e)=>{
+      e.preventDefault();
+      show(p.dataset.view);
+    }));
+
+    jumpers.forEach(a => a.addEventListener(`click`, (e)=>{
+      e.preventDefault();
+      show(a.dataset.jump);
+    }));
+
+    const initial = `home`;
+    show(initial);
+  </script>
+
+  <script>
+    (function(){
+      function update(el){
+        var wrap = el.parentNode;
+        if(!wrap || !wrap.classList.contains(`diagram-wrap`)) return;
+        var scrollable = el.scrollWidth > el.clientWidth + 2;
+        var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
+        wrap.classList.toggle(`can-scroll`, scrollable && !atEnd);
+      }
+      document.addEventListener(`DOMContentLoaded`, function(){
+        document.querySelectorAll(`.diagram`).forEach(function(el){
+          var wrap = document.createElement(`div`);
+          wrap.className = `diagram-wrap`;
+          el.parentNode.insertBefore(wrap, el);
+          wrap.appendChild(el);
+          el.addEventListener(`scroll`, function(){ update(el); }, {passive:true});
+          update(el);
+        });
+        window.addEventListener(`resize`, function(){
+          document.querySelectorAll(`.diagram`).forEach(update);
+        }, {passive:true});
+      });
+    })();
+  </script>
+</body>
+</html>
