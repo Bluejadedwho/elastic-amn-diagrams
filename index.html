@@ -106,9 +106,7 @@
       background:rgba(11,13,16,.55);
       border:1px solid rgba(42,50,64,.7);
       padding:12px;
-      overflow-x:auto;
-      overflow-y:hidden;
-      touch-action:pan-x;
+      overflow:auto;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:thin;
       scrollbar-color:rgba(106,169,255,.35) transparent;
@@ -117,31 +115,24 @@
     .diagram::-webkit-scrollbar-thumb{background:rgba(106,169,255,.35); border-radius:3px}
     .diagram::-webkit-scrollbar-track{background:transparent}
     .diagram-wrap{position:relative; display:block;}
-    
     .diagram-wrap::after{
-      content:'↔ Scroll for more';
+      content:'scroll \203A';
       position:absolute;
-      top:12px; right:12px;
-      padding:6px 12px;
-      background:rgba(106,169,255,.15);
-      border:1px solid rgba(106,169,255,.4);
-      color:#6aa9ff;
+      top:50%; right:0;
+      transform:translateY(-50%);
+      padding:5px 10px 5px 24px;
+      background:linear-gradient(to right, transparent, rgba(11,13,16,.92) 40%);
+      color:rgba(106,169,255,.75);
       font-size:12px;
-      font-weight:600;
-      letter-spacing:.02em;
-      border-radius:8px;
+      letter-spacing:.04em;
       pointer-events:none;
+      border-radius:0 14px 14px 0;
       opacity:0;
-      transition:opacity .3s ease;
-      z-index:10;
-      backdrop-filter:blur(4px);
-      -webkit-backdrop-filter:blur(4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition:opacity .25s;
     }
-    .diagram-wrap.can-scroll::after{ 
-      opacity:1; 
+    @media (hover: hover) and (pointer: fine){
+      .diagram-wrap.can-scroll::after{ opacity:1; }
     }
-    
     .diagram svg{
       width:100%;
       height:auto;
@@ -673,13 +664,13 @@
 
                 <rect class="box" x="80" y="70" width="480" height="330"/>
                 <text class="txt" x="104" y="112">Your phenotype signals reserve</text>
-                <text class="small" x="104" y="148">• dysmyelination-dominant pattern</text>
-                <text class="small" x="104" y="176">• strong Uhthoff sensitivity</text>
-                <text class="small" x="104" y="204">• high intra-day variability</text>
-                <text class="small" x="104" y="232">• preserved passive movement</text>
-                <text class="small" x="104" y="260">• minimal peripheral neuropathy</text>
-                <text class="small" x="104" y="288">• response to sleep/food/hydration</text>
-                <text class="small" x="104" y="316">• conduction fails under load, not absence</text>
+                <text class="small" x="104" y="148">&#8226; dysmyelination-dominant pattern</text>
+                <text class="small" x="104" y="176">&#8226; strong Uhthoff sensitivity</text>
+                <text class="small" x="104" y="204">&#8226; high intra-day variability</text>
+                <text class="small" x="104" y="232">&#8226; preserved passive movement</text>
+                <text class="small" x="104" y="260">&#8226; minimal peripheral neuropathy</text>
+                <text class="small" x="104" y="288">&#8226; response to sleep/food/hydration</text>
+                <text class="small" x="104" y="316">&#8226; conduction fails under load, not absence</text>
 
                 <rect class="good" x="650" y="130" width="380" height="150"/>
                 <text class="txt" x="674" y="172">Implication</text>
@@ -688,10 +679,10 @@
 
                 <rect class="box" x="650" y="320" width="380" height="160"/>
                 <text class="txt" x="674" y="360">What "success" looks like</text>
-                <text class="small" x="674" y="390">• fewer collapses</text>
-                <text class="small" x="674" y="415">• faster recovery</text>
-                <text class="small" x="674" y="440">• wider usable daily window</text>
-                <text class="small" x="674" y="465">• less heat/fatigue sensitivity</text>
+                <text class="small" x="674" y="390">&#8226; fewer collapses</text>
+                <text class="small" x="674" y="415">&#8226; faster recovery</text>
+                <text class="small" x="674" y="440">&#8226; wider usable daily window</text>
+                <text class="small" x="674" y="465">&#8226; less heat/fatigue sensitivity</text>
 
                 <line class="line" x1="560" y1="235" x2="650" y2="205"/>
                 <line class="line" x1="840" y1="280" x2="840" y2="320"/>
@@ -778,6 +769,7 @@
           <div class="legend" style="margin-top:12px">
             <span class="chip"><span class="dot b"></span> Supports / resilience factors</span>
           </div>
+
         </div>
       </div>
     </section>
@@ -799,7 +791,6 @@
       pills.forEach(p => p.classList.toggle('active', p.dataset.view === viewId));
       history.replaceState(null, '', '#' + viewId);
       window.scrollTo({top:0, behavior:'smooth'});
-
     }
 
     pills.forEach(p => p.addEventListener('click', (e)=>{
@@ -817,4 +808,53 @@
   </script>
 
   <script>
+    // Splash: require user action (Enter) so it doesn't vanish instantly on fast loads.
     (function(){
+      function hideSplash(){
+        var s = document.getElementById('splash');
+        if(!s) return;
+        s.classList.add('hidden');
+        setTimeout(function(){ if(s && s.parentNode){ s.parentNode.removeChild(s);} }, 450);
+      }
+      window.__hideSplash = hideSplash;
+      // Optional safety: auto-dismiss after 8 seconds
+      setTimeout(hideSplash, 8000);
+    })();
+  </script>
+
+  <script>
+    (function(){
+      var s = document.getElementById('splash');
+      function hide(){ if(window.__hideSplash) window.__hideSplash(); }
+      if(s){ s.addEventListener('click', function(e){ hide(); }); }
+      var btn = document.getElementById('enterBtn');
+      if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); hide(); }); }
+    })();
+  </script>
+
+  <script>
+    (function(){
+      function update(el){
+        var wrap = el.parentNode;
+        if(!wrap || !wrap.classList.contains('diagram-wrap')) return;
+        var scrollable = el.scrollWidth > el.clientWidth + 2;
+        var atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
+        wrap.classList.toggle('can-scroll', scrollable && !atEnd);
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('.diagram').forEach(function(el){
+          var wrap = document.createElement('div');
+          wrap.className = 'diagram-wrap';
+          el.parentNode.insertBefore(wrap, el);
+          wrap.appendChild(el);
+          el.addEventListener('scroll', function(){ update(el); }, {passive:true});
+          update(el);
+        });
+        window.addEventListener('resize', function(){
+          document.querySelectorAll('.diagram').forEach(update);
+        }, {passive:true});
+      });
+    })();
+  </script>
+</body>
+</html>
