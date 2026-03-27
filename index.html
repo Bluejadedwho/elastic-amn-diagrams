@@ -37,7 +37,7 @@
         var(--bg);
       color:var(--text);
     }
-    .wrap{max-width:1100px; margin:0 auto; padding:22px 14px 56px; overflow:visible}
+    .wrap{max-width:1100px; margin:0 auto; padding:22px 14px calc(120px + env(safe-area-inset-bottom, 0px)); overflow:visible}
     .view, .grid, .card, .bd{min-height:0}
     .bd{overflow:visible}
     header{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
@@ -194,6 +194,7 @@
       .sub{font-size:13px}
       .pill{flex:0 0 auto}
       .diagram{padding:10px}
+      footer{padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));}
     }
   
     /* Splash overlay */
@@ -384,9 +385,6 @@
             Each diagram focuses on one narrow question. Boxes and callouts describe logic and constraints, not guaranteed outcomes.
           </p>
 
-          <p class="note muted" style="margin-top:12px">
-            Note: These diagrams are for explanation and tracking. They are not medical advice.
-          </p>
         </div>
       </div>
     </section>
@@ -396,7 +394,7 @@
         <div class="hd">
           <div>
             <h2>Baseline pathway</h2>
-            <div class="meta">Simplified causal chain from ABCD1 mutation to functional impairment.</div>
+            <div class="meta">Simplified concept map from ABCD1 mutation to conduction-related functional impairment.</div>
           </div>
           <div class="meta">Concept map</div>
         </div>
@@ -439,12 +437,12 @@
                 <rect class="box" x="560" y="120" width="470" height="96" />
                 <text class="k" x="1024" y="145" text-anchor="end">Functional state</text>
                 <text class="txt" x="582" y="160">Oligodendrocyte dysfunction</text>
-                <text class="small" x="582" y="187">fragile myelin support</text>
+                <text class="small" x="582" y="187">impaired support for myelinated tracts</text>
 
                 <rect class="box" x="560" y="240" width="470" height="92" />
                 <text class="k" x="1024" y="265" text-anchor="end">Functional state</text>
-                <text class="txt" x="582" y="278">Dysmyelination</text>
-                <text class="small" x="582" y="305">thin / unstable myelin</text>
+                <text class="txt" x="582" y="278">Myelin instability</text>
+                <text class="small" x="582" y="305">impaired or unstable myelin support</text>
 
                 <rect class="box" x="560" y="350" width="470" height="108" />
                 <text class="k" x="1024" y="375" text-anchor="end">Outcome</text>
@@ -458,15 +456,18 @@
                 <line class="line" x1="795" y1="332" x2="795" y2="350" />
 
                 <text class="txt" x="70" y="472">Outcome:</text>
-                <text class="small" x="170" y="472">variable impairment; reversible collapse under triggers</text>
+                <text class="small" x="170" y="472">variable impairment; transient worsening under triggers</text>
               </svg>
             </div>
             <div class="legend" style="margin-top:12px">
               <span class="chip"><span class="dot d"></span> Primary pathway boxes</span>
             </div>
           <p class="note" style="margin-top:12px">
+            This baseline is a simplified working model. In AMN, spinal cord axonopathy is central, and myelin-related dysfunction may contribute to how symptoms appear.
+          </p>
+          <p class="note" style="margin-top:12px">
             Main takeaway: a <strong>margin problem</strong>.
-            The wiring exists, but transmission fails under stressors.
+            The pathways remain partly usable, but signaling can worsen under heat, fatigue, or other stressors.
           </p>
           <div class="linkbox">
             <a class="btn secondary" href="#overlay" data-jump="overlay">Next: overlay</a>
@@ -550,8 +551,8 @@
 
                 <rect class="tag2" x="80" y="468" width="560" height="74"/>
                 <text class="k" x="628" y="500" text-anchor="end">Support</text>
-                <text class="tagt" x="104" y="506">Avoid CNS suppression → preserve activity patterns</text>
-                <text class="tagt" x="104" y="528">that support myelin</text>
+                <text class="tagt" x="104" y="506">Limit excess sedation when possible → preserve daytime</text>
+                <text class="tagt" x="104" y="528">function and activity tolerance</text>
 
                 <rect class="goalbox" x="70" y="552" width="960" height="36" rx="14" ry="14" />
                 <text class="small" x="90" y="575">Goal: fewer collapses, faster recovery, wider usable window</text>
@@ -656,7 +657,7 @@
         <div class="hd">
           <div>
             <h2>Phenotype modifiers</h2>
-            <div class="meta">Why your profile may have higher-than-average upside for margin-based gains.</div>
+            <div class="meta">How certain feature patterns can suggest retained functional reserve.</div>
           </div>
           <div class="meta">Concept map</div>
         </div>
@@ -681,19 +682,19 @@
                 </defs>
 
                 <rect class="box" x="80" y="70" width="480" height="330"/>
-                <text class="txt" x="104" y="112">Your phenotype signals reserve</text>
-                <text class="small" x="104" y="148">• dysmyelination-dominant pattern</text>
-                <text class="small" x="104" y="176">• strong Uhthoff sensitivity</text>
-                <text class="small" x="104" y="204">• high intra-day variability</text>
-                <text class="small" x="104" y="232">• preserved passive movement</text>
-                <text class="small" x="104" y="260">• minimal peripheral neuropathy</text>
-                <text class="small" x="104" y="288">• response to sleep/food/hydration</text>
-                <text class="small" x="104" y="316">• conduction fails under load, not absence</text>
+                <text class="txt" x="104" y="112">Feature pattern suggesting reserve</text>
+                <text class="small" x="104" y="148">• marked heat sensitivity</text>
+                <text class="small" x="104" y="176">• high intra-day variability</text>
+                <text class="small" x="104" y="204">• function improves with rest or basic supports</text>
+                <text class="small" x="104" y="232">• worsening under load more than fixed absence</text>
+                <text class="small" x="104" y="260">• some preserved function between flares</text>
+                <text class="small" x="104" y="288">• day-to-day performance is not static</text>
+                <text class="small" x="104" y="316">• response pattern is compatible with limited reserve</text>
 
                 <rect class="good" x="650" y="130" width="380" height="150"/>
                 <text class="txt" x="674" y="172">Implication</text>
-                <text class="small" x="674" y="205">Margin-based interventions may</text>
-                <text class="small" x="674" y="230">produce noticeable functional change</text>
+                <text class="small" x="674" y="205">Margin-based interventions may be</text>
+                <text class="small" x="674" y="230">more noticeable when reserve remains</text>
 
                 <rect class="box" x="650" y="320" width="380" height="160"/>
                 <text class="txt" x="674" y="360">What "success" looks like</text>
@@ -710,8 +711,8 @@
               <span class="chip"><span class="dot d"></span> Phenotype context (this map only)</span>
             </div>
           <p class="note" style="margin-top:12px">
-            This does <strong>not</strong> guarantee repair. It suggests the system may still be
-            responsive to interventions that widen conduction margin.
+            This does <strong>not</strong> guarantee repair. It suggests some symptoms may still be
+            modifiable when residual reserve is present.
           </p>
           <div class="linkbox">
             <a class="btn secondary" href="#home" data-jump="home">Back to home</a>
