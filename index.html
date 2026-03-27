@@ -49,7 +49,7 @@
       white-space:nowrap;
     }
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .chip{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);border:1px solid rgba(106,169,255,.25);padding:6px 10px;border-radius:999px;background:rgba(106,169,255,.06)}
+    .chip{font-size:12px;color:var(--muted);border:1px solid rgba(60,76,96,.6);padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.15)}
     .pill:hover{transform:translateY(-1px); border-color:rgba(106,169,255,.6); color:var(--text)}
     .pill.active{border-color:transparent; color:var(--text); box-shadow:0 0 0 2px rgba(106,169,255,.9) inset}
     
@@ -130,7 +130,9 @@
       opacity:0;
       transition:opacity .25s;
     }
-    .diagram-wrap.can-scroll::after{ opacity:1; }
+    @media (hover: hover) and (pointer: fine){
+      .diagram-wrap.can-scroll::after{ opacity:1; }
+    }
     .diagram svg{
       width:100%;
       height:auto;
@@ -139,6 +141,7 @@
     }
     .svg{width:100%; height:auto; display:block;}
     .legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; color:var(--muted); font-size:13px;}
+    .chip{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(42,50,64,.75); background:rgba(18,21,27,.55)}
     .dot{width:10px; height:10px; border-radius:50%}
     .dot.a{background:var(--purple)}
     .dot.b{background:var(--green)}
@@ -806,7 +809,7 @@
 
       pills.forEach(p => p.classList.toggle('active', p.dataset.view === viewId));
       history.replaceState(null, '', '#' + viewId);
-      window.scrollTo(0, 0);
+      window.scrollTo({top:0, behavior:'smooth'});
 
     }
 
